@@ -1,10 +1,10 @@
-package com.kabouzeid.gramophone.lastfm.rest;
+package com.kabouzeid.gramophone.spotify.rest;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.kabouzeid.gramophone.lastfm.rest.service.LastFMService;
+import com.kabouzeid.gramophone.spotify.rest.service.SpotifyService;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,36 +18,28 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+public class SpotifyRestClient {
+    public static final String BASE_URL = "https://api.spotify.com/";
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
-public class LastFMRestClient {
-    public static final String BASE_URL = "http://ws.audioscrobbler.com/2.0/";
+    private final SpotifyService spotifyService;
 
-    private LastFMService lastFMService;
-
-    public LastFMRestClient(@NonNull Context context) {
+    public SpotifyRestClient(@NonNull Context context) {
         this(createDefaultOkHttpClientBuilder(context).build());
     }
 
-    public LastFMRestClient(@NonNull Call.Factory client) {
+    public SpotifyRestClient(@NonNull Call.Factory client) {
         Retrofit restAdapter = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .callFactory(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        lastFMService = restAdapter.create(LastFMService.class);
-    }
-
-    public LastFMService getService() {
-        return lastFMService;
+        spotifyService = restAdapter.create(SpotifyService.class);
     }
 
     @Nullable
     public static Cache createDefaultCache(Context context) {
-        File cacheDir = new File(context.getCacheDir().getAbsolutePath(), "/okhttp-lastfm/");
+        File cacheDir = new File(context.getCacheDir().getAbsolutePath(), "/okhttp-spotify/");
         if (cacheDir.mkdirs() || cacheDir.isDirectory()) {
             return new Cache(cacheDir, 1024 * 1024 * 10);
         }
@@ -70,5 +62,9 @@ public class LastFMRestClient {
         return new OkHttpClient.Builder()
                 .cache(createDefaultCache(context))
                 .addInterceptor(createCacheControlInterceptor());
+    }
+
+    public SpotifyService getService() {
+        return spotifyService;
     }
 }
