@@ -1,8 +1,4 @@
-package com.kabouzeid.gramophone.helper;
-
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
+package com.kabouzeid.gramophone.helper.playingnotificationhelper;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -37,9 +33,11 @@ import com.kabouzeid.gramophone.util.PhonographColorUtil;
 import com.kabouzeid.gramophone.util.PreferenceUtil;
 import com.kabouzeid.gramophone.util.Util;
 
-public class PlayingNotificationHelper {
+/**
+ * @author Karim Abou Zeid (kabouzeid)
+ */
 
-    public static final String TAG = PlayingNotificationHelper.class.getSimpleName();
+class PlayingNotificationHelperImpl implements PlayingNotificationHelper {
     private static final int NOTIFICATION_ID = 1;
 
     private MusicService service;
@@ -48,10 +46,11 @@ public class PlayingNotificationHelper {
 
     private boolean stopped;
 
-    public PlayingNotificationHelper(@NonNull final MusicService service) {
+    public PlayingNotificationHelperImpl(@NonNull final MusicService service) {
         this.service = service;
     }
 
+    @Override
     public synchronized void updateNotification() {
         stopped = false;
 
@@ -175,6 +174,7 @@ public class PlayingNotificationHelper {
 
     }
 
+    @Override
     public synchronized void killNotification() {
         stopped = true;
         service.stopForeground(true);

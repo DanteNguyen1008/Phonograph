@@ -42,9 +42,10 @@ import com.kabouzeid.gramophone.appwidgets.AppWidgetClassic;
 import com.kabouzeid.gramophone.appwidgets.AppWidgetSmall;
 import com.kabouzeid.gramophone.glide.BlurTransformation;
 import com.kabouzeid.gramophone.glide.SongGlideRequest;
-import com.kabouzeid.gramophone.helper.PlayingNotificationHelper;
 import com.kabouzeid.gramophone.helper.ShuffleHelper;
 import com.kabouzeid.gramophone.helper.StopWatch;
+import com.kabouzeid.gramophone.helper.playingnotificationhelper.PlayingNotificationHelper;
+import com.kabouzeid.gramophone.helper.playingnotificationhelper.PlayingNotificationHelperFactory;
 import com.kabouzeid.gramophone.model.Song;
 import com.kabouzeid.gramophone.provider.HistoryStore;
 import com.kabouzeid.gramophone.provider.MusicPlaybackQueueStore;
@@ -167,7 +168,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     public void onCreate() {
         super.onCreate();
 
-        playingNotificationHelper = new PlayingNotificationHelper(this);
+        playingNotificationHelper = PlayingNotificationHelperFactory.from(this);
 
         final PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
